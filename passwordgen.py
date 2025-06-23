@@ -115,7 +115,6 @@ def gen_password1(length, use_uppercase, use_nums, use_special):
     random.shuffle(password)
     return ''.join(password)
 
-
 def main():
     length=get_password_len()
     has_special=get_special_chars_preference()
@@ -124,4 +123,5 @@ def main():
     password=gen_password1(length, has_uppercase, has_nums, has_special)
     print(f'Password: {password}')
 
-main()
+if __name__ == "main":
+    main()
