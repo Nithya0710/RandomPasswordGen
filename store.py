@@ -41,7 +41,7 @@ def write_passwords_to_file(passwords, filename='passwords.dat', master_password
     if directory:
         os.makedirs(directory, exist_ok=True)
     if master_password:
-        kay, salt=gen_key(master_password)
+        key, salt=gen_key(master_password)
         cipher_suite=Fernet(key)
     else:
         cipher_suite=None
@@ -73,3 +73,12 @@ def check_file_permissions(filename):
         print("Permission denied when accessing file permissions.")
         return False
     
+if __name__ == "__main__":
+    passwords_to_save=["password1", "password2", "password3"]
+    master_password=getpass.getpass("Enter master password: ")
+    try:
+        file_path=write_passwords_to_file(passwords_to_save, filename='secure/passwords.dat', master_password=master_password)
+        print(f"Passwords saved securely to: {file_path}")
+        check_file_permissions(file_path)
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
