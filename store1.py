@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from cryptography.fernet import Fernet
 import json
+import logging
 
 def gen_key():
     """
@@ -38,11 +39,40 @@ def save_passwords_securely(passwords, key):
     except Exception as e:
         print(f"Error saving passwords: {str(e)}")
         return False
+    
+def write_passwords_to_file(passwords, filename):
+    """
+    Writes generated passwords to a specified file securely.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        with open(filename, 'w') as f:
+            for i in passwords:
+                f.write(i+'\n')
+        return True
+    except PermissionError:
+        logging.error("Permission denied when trying to write to file: {}".format(filename))
+        print("Error: Permission denied. Please check file permissions.")
+        return False
+    except IOError as e:
+        logging.error("I/O error occurred while writing to file: {}".format(str(e)))
+        print("Error: Unable to write to file. Please check the file path and try again.")
+        return False
+    except Exception as e:
+        logging.error("Unexpected error occurred while writing to file: {}".format(str(e)))
+        print("An expected error occurred: {}".formate(str(e)))
+        return False
+    else:
+        print("Passwords successfully saved to: {}".format(filename))
+        return True
+    finally:
+        pass
 
 if __name__=="__main__":
     secret_key=gen_key()
     passwords={"email": "strongpassword123!", "bank_account": "anothersecurepassword456"}
-    success=save_passwords_securely(passwords, secret_key)
+    filename="secure.txt"
+    success=write_passwords_to_file(passwords, filename)
     if success:
         print("Passwords saved securely.")
     else:
